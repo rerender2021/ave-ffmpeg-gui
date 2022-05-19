@@ -1,4 +1,5 @@
 import { App, WindowCreation, Window, WindowFlag, ThemeImage, CultureId } from "ave-ui";
+import { Main } from "./components";
 import { initI18n } from "./i18n";
 import { iconDataMap } from "./resource";
 import { state } from "./state";
@@ -6,6 +7,8 @@ import { state } from "./state";
 export class Program {
 	private app: App;
 	private window: Window;
+	
+	private mainArea: Main;
 
 	private theme: ThemeImage;
 
@@ -41,8 +44,8 @@ export class Program {
 		this.window.OnCreateContent((window) => {
 			window.SetIcon(state.getResMap().WindowIcon);
 			// state.i18n.switch(CultureId.zh_cn);
-			// this.mainArea = new Main(window).create();
-			// window.SetContent(this.mainArea.control);
+			this.mainArea = new Main(window).create();
+			window.SetContent(this.mainArea.control);
 			return true;
 		});
 	}
