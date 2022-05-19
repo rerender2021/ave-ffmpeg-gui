@@ -8,7 +8,7 @@ const config: IPackConfig = {
     output: "./bin/ave-app.exe",
   },
   resource: {
-    icon: "./assets/ave.ico",
+    icon: "./assets/cooking.ico",
     productVersion: "0.0.1",
     productName: "Ave Template App",
     fileVersion: "0.0.1",

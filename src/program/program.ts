@@ -13,7 +13,7 @@ export class Program {
 		this.app = new App();
 		state.setApp(this.app);
 
-		const resMap = this.app.CreateResourceMap(this.app, [16, 24, 32], iconDataMap);
+		const resMap = this.app.CreateResourceMap(this.app, [16], iconDataMap);
 		state.setResMap(resMap);
 
 		const i18n = initI18n(this.app);
