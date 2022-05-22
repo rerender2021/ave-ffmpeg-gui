@@ -21,6 +21,7 @@ export class Program {
 
 		const i18n = initI18n(this.app);
 		state.setI18n(i18n);
+		state.i18n.switch(CultureId.en_us);
 
 		this.theme = new ThemeImage();
 
@@ -43,7 +44,6 @@ export class Program {
 	private onCreateContent() {
 		this.window.OnCreateContent((window) => {
 			window.SetIcon(state.getResMap().WindowIcon);
-			// state.i18n.switch(CultureId.zh_cn);
 			this.mainArea = new Main(window).create();
 			window.SetContent(this.mainArea.control);
 			return true;

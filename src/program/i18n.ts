@@ -7,6 +7,8 @@ export interface ILang {
 	__FontStd: string;
 
 	// user defined key
+	Recipe: string;
+	AddFrameNumber: string;
 }
 
 export type KeyOfLang = keyof ILang;
@@ -37,6 +39,8 @@ export function initI18n(app: App) {
 				__FontStd: "Segoe UI",
 
 				//
+				Recipe: "Recipe",
+				AddFrameNumber: "Add Frame Number",
 			},
 			[CultureId.zh_cn]: {
 				AppTitle: "音视频料理",
@@ -44,6 +48,8 @@ export function initI18n(app: App) {
 				__FontStd: "Microsoft YaHei UI",
 
 				//
+				Recipe: "Recipe",
+				AddFrameNumber: "Add Frame Number",
 			},
 		},
 	};
