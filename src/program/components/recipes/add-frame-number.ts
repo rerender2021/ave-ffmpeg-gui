@@ -1,17 +1,15 @@
-import { Button, ResourceSource } from "ave-ui";
+import { Button, Picture, ResourceSource } from "ave-ui";
 import { Area, createGridLayout, GridLayout, ImageView } from "../../../components";
 import { assetBuffer } from "../../../utils";
 import { state } from "../../state";
 
 export class RecipeAddFrameNumber extends Area {
-	private view: ImageView;
+	private view: Picture;
 
 	protected onCreate(): GridLayout {
 		const { window } = this;
-		this.view = new ImageView(window);
-		const codec = state.getApp().GetImageCodec();
-		const image = codec.Open(ResourceSource.FromBuffer(assetBuffer("recipes/add-frame-number/out-raw-001.png")));
-		this.view.updateRawImage(image);
+		this.view = new Picture(window);
+		this.view.SetPicture(ResourceSource.FromBuffer(assetBuffer("recipes/add-frame-number/out-raw-001.png")));
 
 		const container = this.onCreateLayout();
 		return container;
@@ -32,7 +30,7 @@ export class RecipeAddFrameNumber extends Area {
 		button.SetText("Button");
 
 		const container = createGridLayout(window, containerLayout);
-		container.addControl(this.view.control, containerLayout.areas.content);
+		container.addControl(this.view, containerLayout.areas.content);
 		return container;
 	}
 }
