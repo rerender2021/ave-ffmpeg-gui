@@ -1,15 +1,16 @@
-import { Button, Picture, ResourceSource } from "ave-ui";
-import { Area, createGridLayout, GridLayout, ImageView } from "../../../components";
-import { assetBuffer, assetPath } from "../../../utils";
-import { state } from "../../state";
+import { Button, Picture, ResourceSource, StretchMode } from "ave-ui";
+import { Area, createGridLayout, GridLayout } from "../../../components";
+import { assetPath } from "../../../utils";
 
 export class RecipeAddFrameNumber extends Area {
-	private view: Picture;
+	private demoImage: Picture;
 
 	protected onCreate(): GridLayout {
 		const { window } = this;
-		this.view = new Picture(window);
-		this.view.SetPicture(ResourceSource.FromPackedFile(assetPath("recipes/add-frame-number/out-raw-001.png")));
+
+		this.demoImage = new Picture(window);
+		this.demoImage.SetPicture(ResourceSource.FromPackedFile(assetPath(`recipes/add-frame-number/demo.png`)));
+		this.demoImage.SetStretchMode(StretchMode.Fit);
 
 		const container = this.onCreateLayout();
 		return container;
@@ -19,10 +20,10 @@ export class RecipeAddFrameNumber extends Area {
 		const { window } = this;
 
 		const containerLayout = {
-			rows: "1",
-			columns: "1",
+			rows: "1 1 1 1 1",
+			columns: "1 1 1",
 			areas: {
-				content: { x: 0, y: 0 },
+				demoImage: { x: 1, y: 1 },
 			},
 		};
 
@@ -30,7 +31,8 @@ export class RecipeAddFrameNumber extends Area {
 		button.SetText("Button");
 
 		const container = createGridLayout(window, containerLayout);
-		container.addControl(this.view, containerLayout.areas.content);
+		container.addControl(this.demoImage, containerLayout.areas.demoImage);
+
 		return container;
 	}
 }
