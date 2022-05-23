@@ -1,9 +1,10 @@
-import { Button, Picture, ResourceSource, StretchMode } from "ave-ui";
+import { AlignType, Button, Label, Picture, ResourceSource, StretchMode } from "ave-ui";
 import { Area, createGridLayout, GridLayout } from "../../../components";
 import { assetPath } from "../../../utils";
 
 export class RecipeAddFrameNumber extends Area {
 	private demoImage: Picture;
+	private description: Label;
 
 	protected onCreate(): GridLayout {
 		const { window } = this;
@@ -11,6 +12,10 @@ export class RecipeAddFrameNumber extends Area {
 		this.demoImage = new Picture(window);
 		this.demoImage.SetPicture(ResourceSource.FromPackedFile(assetPath(`recipes/add-frame-number/demo.png`)));
 		this.demoImage.SetStretchMode(StretchMode.Fit);
+
+		this.description = new Label(window);
+		this.description.SetText("Description: Add frame number to each frame of your video");
+		this.description.SetAlignHorz(AlignType.Center);
 
 		const container = this.onCreateLayout();
 		return container;
@@ -20,10 +25,11 @@ export class RecipeAddFrameNumber extends Area {
 		const { window } = this;
 
 		const containerLayout = {
-			rows: "1 1 1 1 1",
+			rows: "50dpx 30dpx 200dpx 1",
 			columns: "1 1 1",
 			areas: {
-				demoImage: { x: 1, y: 1 },
+				description: { x: 1, y: 1 },
+				demoImage: { x: 1, y: 2 },
 			},
 		};
 
@@ -32,6 +38,7 @@ export class RecipeAddFrameNumber extends Area {
 
 		const container = createGridLayout(window, containerLayout);
 		container.addControl(this.demoImage, containerLayout.areas.demoImage);
+		container.addControl(this.description, containerLayout.areas.description);
 
 		return container;
 	}
