@@ -37,7 +37,7 @@ export class Sidebar extends Area {
 			{
 				name: i18n.t("Recipe"),
 				align: HeaderItemFormat.Left,
-				size: DpiSize.FromPixelScaled(200),
+				size: DpiSize.FromPixelScaled(190),
 			},
 		];
 		headers.forEach((header) => {
@@ -53,8 +53,6 @@ export class Sidebar extends Area {
             { name: "b" }, 
             { name: "c" }, 
             { name: "d" }, 
-            { name: "e" }, 
-            { name: "f" }
         ];
 		this.recipes.SetVirtual((sender, rowIndex, headerIndex) => {
 			const item = new RichListBoxItemVirtual();
