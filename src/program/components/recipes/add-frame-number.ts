@@ -9,6 +9,7 @@ export class RecipeAddFrameNumber extends Area {
 
 	//
 	private step1: Label;
+	private filePath: Label;
 	private dropArea: DropArea;
 
 	//
@@ -30,6 +31,10 @@ export class RecipeAddFrameNumber extends Area {
 		this.step1 = new Label(window);
 		this.step1.SetText("Step1: Drop your video here");
 		this.step1.SetAlignHorz(AlignType.Near);
+
+		this.filePath = new Label(window);
+		this.filePath.SetText("Use File: ");
+		this.filePath.SetAlignHorz(AlignType.Near);
 
 		// https://www.flaticon.com/free-icon/pieces-of-cutlery_1328
 		const uploadIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/upload-128.png"))).Resize(100, 100, ImageFilterType.Linear);
@@ -60,6 +65,7 @@ export class RecipeAddFrameNumber extends Area {
 				//
 				step1: { x: 1, y: 3 },
 				dropArea: { x: 1, y: 5 },
+				filePath: { x: 2, y: 5 },
 
 				//
 				step2: { x: 1, y: 7 },
@@ -70,8 +76,21 @@ export class RecipeAddFrameNumber extends Area {
 		const container = createGridLayout(window, containerLayout);
 		container.addControl(this.demoImage, containerLayout.areas.demoImage);
 		container.addControl(this.description, containerLayout.areas.description);
+
 		container.addControl(this.step1, containerLayout.areas.step1);
 		container.addControl(this.dropArea.control, containerLayout.areas.dropArea);
+
+		const filePathLayout = {
+			rows: "30dpx 1",
+			columns: "15dpx 150dpx 1",
+			areas: {
+				content: { x: 1, y: 0 },
+			},
+		};
+		const filePathArea = createGridLayout(window, filePathLayout);
+		filePathArea.addControl(this.filePath, filePathArea.areas.content);
+		container.addControl(filePathArea.control, containerLayout.areas.filePath);
+		
 		container.addControl(this.step2, containerLayout.areas.step2);
 
 		const runLayout = {
