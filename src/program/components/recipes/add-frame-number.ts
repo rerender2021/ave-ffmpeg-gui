@@ -33,7 +33,9 @@ export class RecipeAddFrameNumber extends Area {
 
 		// https://www.flaticon.com/free-icon/pieces-of-cutlery_1328
 		const uploadIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/upload-128.png"))).Resize(100, 100, ImageFilterType.Linear);
-		this.dropArea = new DropArea(window, uploadIcon);
+		// https://www.flaticon.com/free-icon/film-roll_861577?term=film
+		const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
+		this.dropArea = new DropArea(window, uploadIcon, fileIcon);
 
 		this.step2 = new Label(window);
 		this.step2.SetText("Step1: Click Run");

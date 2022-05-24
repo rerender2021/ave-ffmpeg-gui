@@ -5,10 +5,12 @@ import { NativeRawImage } from "./native-image";
 export class DropArea extends Component {
 	private placeholder: Placeholder;
 	private uploadIcon: NativeRawImage;
+	private fileIcon: NativeRawImage;
 
-	constructor(window: Window, uploadIcon: AveImage) {
+	constructor(window: Window, uploadIcon: AveImage, fileIcon: AveImage) {
 		super(window);
 		this.uploadIcon = new NativeRawImage(window, uploadIcon);
+		this.fileIcon = new NativeRawImage(window, fileIcon);
 		this.onCreate();
 	}
 
@@ -30,8 +32,16 @@ export class DropArea extends Component {
 		painter.SetPenColor(new Vec4(64, 169, 255, 255));
 		painter.DrawRectangle(rect.x, rect.y, rect.w, rect.h);
 
-		const x = rect.w / 2 - this.uploadIcon.native.GetWidth() / 2;
-		const y = rect.h / 2 - this.uploadIcon.native.GetHeight() / 2;
-		painter.DrawImage(this.uploadIcon.native, new Vec2(x, y));
+		{
+			const x = rect.w / 2 - this.uploadIcon.native.GetWidth() / 2;
+			const y = rect.h / 2 - this.uploadIcon.native.GetHeight() / 2;
+			painter.DrawImage(this.uploadIcon.native, new Vec2(x, y));
+		}
+
+		{
+			const x = rect.w / 2 - this.fileIcon.native.GetWidth() / 2;
+			const y = rect.h / 2 - this.fileIcon.native.GetHeight() / 2;
+			painter.DrawImage(this.fileIcon.native, new Vec2(x, y));
+		}
 	}
 }
