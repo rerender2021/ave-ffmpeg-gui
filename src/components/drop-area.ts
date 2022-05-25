@@ -2,10 +2,19 @@ import { AveImage, IPainter, IPlaceholder, Placeholder, Rect, Vec2, Vec4, Window
 import { Component } from "./component";
 import { NativeRawImage } from "./native-image";
 
+interface IDropAreaStyle {
+	border: {
+		color: Vec4;
+	};
+}
+
 export class DropArea extends Component {
 	private placeholder: Placeholder;
 	private uploadIcon: NativeRawImage;
 	private fileIcon: NativeRawImage;
+	private isEntered: boolean;
+	private colors: { normal: Vec4; hover: Vec4 };
+	private style: IDropAreaStyle;
 
 	constructor(window: Window, uploadIcon: AveImage, fileIcon: AveImage) {
 		super(window);
@@ -20,8 +29,34 @@ export class DropArea extends Component {
 
 	private onCreate() {
 		const { window } = this;
+
+		this.isEntered = false;
+		this.colors = {
+			normal: new Vec4(250, 250, 250, 255 * 0.75),
+			hover: new Vec4(64, 169, 255, 255),
+		};
+		this.style = {
+			border: {
+				color: this.colors.normal,
+			},
+		};
+
 		this.placeholder = new Placeholder(window);
 		this.placeholder.OnPaintPost(this.onPaint.bind(this));
+		this.placeholder.OnPointerEnter(this.onEnter.bind(this));
+		this.placeholder.OnPointerLeave(this.onLeave.bind(this));
+	}
+
+	private onEnter() {
+		this.isEntered = true;
+		this.style.border.color = this.colors.hover;
+		this.placeholder.Redraw();
+	}
+
+	private onLeave() {
+		this.isEntered = false;
+		this.style.border.color = this.colors.normal;
+		this.placeholder.Redraw();
 	}
 
 	private onPaint(sender: IPlaceholder, painter: IPainter, rect: Rect) {
@@ -29,7 +64,7 @@ export class DropArea extends Component {
 		painter.FillRectangle(rect.x, rect.y, rect.w, rect.h);
 
 		// TODO: how to draw dash line
-		painter.SetPenColor(new Vec4(64, 169, 255, 255));
+		painter.SetPenColor(this.style.border.color);
 		painter.DrawRectangle(rect.x, rect.y, rect.w, rect.h);
 
 		{
