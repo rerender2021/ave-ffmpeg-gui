@@ -1,7 +1,7 @@
 import { AlignType, Button, ImageFilterType, Label, Picture, ResourceSource, StretchMode } from "ave-ui";
-import { Area, createGridLayout, GridLayout, DropArea } from "../../../components";
-import { assetPath } from "../../../utils";
-import { state } from "../../state";
+import { Area, createGridLayout, GridLayout, DropArea } from "../../../../components";
+import { assetPath } from "../../../../utils";
+import { state } from "../../../state";
 
 export class RecipeAddFrameNumber extends Area {
 	private demoImage: Picture;
