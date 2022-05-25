@@ -1,4 +1,4 @@
-import { AveImage, IPainter, IPlaceholder, Placeholder, Rect, Vec2, Vec4, Window } from "ave-ui";
+import { AveImage, DragDropImage, DropBehavior, IPainter, IPlaceholder, Placeholder, Rect, Vec2, Vec4, Window } from "ave-ui";
 import { Component } from "./component";
 import { NativeRawImage } from "./native-image";
 
@@ -44,7 +44,19 @@ export class DropArea extends Component {
 		this.placeholder = new Placeholder(window);
 		this.placeholder.OnPaintPost(this.onPaint.bind(this));
 		this.placeholder.OnPointerEnter(this.onEnter.bind(this));
+		this.placeholder.OnDragEnter(this.onEnter.bind(this));
 		this.placeholder.OnPointerLeave(this.onLeave.bind(this));
+		this.placeholder.OnDragLeave(this.onLeave.bind(this));
+		this.placeholder.OnDragMove((sender, dc) => {
+			if (1 == dc.FileGetCount() && ["mp4"].some((extension) => dc.FileGet()[0].toLowerCase().endsWith(extension))) {
+				dc.SetDropTip(DragDropImage.Copy, "Use this file");
+				dc.SetDropBehavior(DropBehavior.Copy);
+			}
+		});
+		this.placeholder.OnDragDrop((sender, dc) => {
+			const file = dc.FileGet()[0];
+			console.log(`use file: ${file}`);
+		});
 	}
 
 	private onEnter() {
