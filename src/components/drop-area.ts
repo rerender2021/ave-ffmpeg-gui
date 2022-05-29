@@ -8,18 +8,23 @@ interface IDropAreaStyle {
 	};
 }
 
+export type OnDropHandler = (filePath: string) => void;
+
 export class DropArea extends Component {
 	private placeholder: Placeholder;
 	private uploadIcon: NativeRawImage;
 	private fileIcon: NativeRawImage;
+	private filePath: string;
 	private isEntered: boolean;
 	private colors: { normal: Vec4; hover: Vec4 };
 	private style: IDropAreaStyle;
+	private onDrop: OnDropHandler;
 
-	constructor(window: Window, uploadIcon: AveImage, fileIcon: AveImage) {
+	constructor(window: Window, uploadIcon: AveImage, fileIcon: AveImage, onDrop: OnDropHandler) {
 		super(window);
 		this.uploadIcon = new NativeRawImage(window, uploadIcon);
 		this.fileIcon = new NativeRawImage(window, fileIcon);
+		this.onDrop = onDrop;
 		this.onCreate();
 	}
 
@@ -40,6 +45,7 @@ export class DropArea extends Component {
 				color: this.colors.normal,
 			},
 		};
+		this.filePath = "";
 
 		this.placeholder = new Placeholder(window);
 		this.placeholder.OnPaintPost(this.onPaint.bind(this));
@@ -55,7 +61,10 @@ export class DropArea extends Component {
 		});
 		this.placeholder.OnDragDrop((sender, dc) => {
 			const file = dc.FileGet()[0];
-			console.log(`use file: ${file}`);
+			this.filePath = file;
+			this.placeholder.Redraw();
+			this.onDrop(this.filePath);
+			// console.log(`use file: ${file}`);
 		});
 	}
 
@@ -79,16 +88,14 @@ export class DropArea extends Component {
 		painter.SetPenColor(this.style.border.color);
 		painter.DrawRectangle(rect.x, rect.y, rect.w, rect.h);
 
-		{
-			const x = rect.w / 2 - this.uploadIcon.native.GetWidth() / 2;
-			const y = rect.h / 2 - this.uploadIcon.native.GetHeight() / 2;
-			painter.DrawImage(this.uploadIcon.native, new Vec2(x, y));
-		}
-
-		{
+		if (this.filePath) {
 			const x = rect.w / 2 - this.fileIcon.native.GetWidth() / 2;
 			const y = rect.h / 2 - this.fileIcon.native.GetHeight() / 2;
 			painter.DrawImage(this.fileIcon.native, new Vec2(x, y));
+		} else {
+			const x = rect.w / 2 - this.uploadIcon.native.GetWidth() / 2;
+			const y = rect.h / 2 - this.uploadIcon.native.GetHeight() / 2;
+			painter.DrawImage(this.uploadIcon.native, new Vec2(x, y));
 		}
 	}
 }

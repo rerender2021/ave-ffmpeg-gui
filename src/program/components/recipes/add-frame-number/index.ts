@@ -40,10 +40,12 @@ export class RecipeAddFrameNumber extends Area {
 		const uploadIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/upload-128.png"))).Resize(100, 100, ImageFilterType.Linear);
 		// https://www.flaticon.com/premium-icon/video_4726008
 		const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
-		this.dropArea = new DropArea(window, uploadIcon, fileIcon);
+		this.dropArea = new DropArea(window, uploadIcon, fileIcon, (filepath) => {
+			this.filePath.SetText(`Use File: ${filepath}`);
+		});
 
 		this.step2 = new Label(window);
-		this.step2.SetText("Step1: Click Run");
+		this.step2.SetText("Step2: Click Run");
 		this.step2.SetAlignHorz(AlignType.Near);
 
 		this.run = new Button(window);
@@ -56,8 +58,23 @@ export class RecipeAddFrameNumber extends Area {
 	private onCreateLayout() {
 		const { window } = this;
 
+		// prettier-ignore
 		const containerLayout = {
-			rows: "50dpx 30dpx 200dpx 30dpx 15dpx 150dpx 15dpx 30dpx 15dpx 30dpx 1",
+			rows: [
+				"50dpx",
+				"30dpx",  /** description */
+				"200dpx", /** demoImage */
+				"30dpx",  /** step1 */
+				"15dpx",
+				"150dpx", /** dropArea */
+				"15dpx",
+				"30dpx",  /** filePath */
+				"15dpx",
+				"30dpx",  /** step2 */
+				"15dpx",
+				"30dpx",  /** run */
+				"1"
+			].join(" "),
 			columns: "1 1 1",
 			areas: {
 				description: { x: 1, y: 1 },
@@ -65,11 +82,11 @@ export class RecipeAddFrameNumber extends Area {
 				//
 				step1: { x: 1, y: 3 },
 				dropArea: { x: 1, y: 5 },
-				filePath: { x: 2, y: 5 },
+				filePath: { x: 1, y: 7 },
 
 				//
-				step2: { x: 1, y: 7 },
-				run: { x: 1, y: 9 },
+				step2: { x: 1, y: 9 },
+				run: { x: 1, y: 11 },
 			},
 		};
 
@@ -79,18 +96,8 @@ export class RecipeAddFrameNumber extends Area {
 
 		container.addControl(this.step1, containerLayout.areas.step1);
 		container.addControl(this.dropArea.control, containerLayout.areas.dropArea);
+		container.addControl(this.filePath, containerLayout.areas.filePath);
 
-		const filePathLayout = {
-			rows: "30dpx 1",
-			columns: "15dpx 150dpx 1",
-			areas: {
-				content: { x: 1, y: 0 },
-			},
-		};
-		const filePathArea = createGridLayout(window, filePathLayout);
-		filePathArea.addControl(this.filePath, filePathArea.areas.content);
-		container.addControl(filePathArea.control, containerLayout.areas.filePath);
-		
 		container.addControl(this.step2, containerLayout.areas.step2);
 
 		const runLayout = {
