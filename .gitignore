@@ -4,3 +4,5 @@ bin
 .pkg-cache
 external
 *.bkp
+src/program/command/temp
+lib/ffmpeg.exe

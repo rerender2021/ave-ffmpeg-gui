@@ -1,6 +1,8 @@
 import { AlignType, Button, ImageFilterType, Label, Picture, ResourceSource, StretchMode } from "ave-ui";
 import { Area, createGridLayout, GridLayout, DropArea } from "../../../../components";
+import { NativeRawImage } from "../../../../components/native-image";
 import { assetPath } from "../../../../utils";
+import { getVideoPreview } from "../../../command";
 import { state } from "../../../state";
 
 export class RecipeAddFrameNumber extends Area {
@@ -33,15 +35,24 @@ export class RecipeAddFrameNumber extends Area {
 		this.step1.SetAlignHorz(AlignType.Near);
 
 		this.filePath = new Label(window);
-		this.filePath.SetText("Use File: ");
+		this.filePath.SetText("File Path: ");
 		this.filePath.SetAlignHorz(AlignType.Near);
 
 		// https://www.flaticon.com/free-icon/pieces-of-cutlery_1328
 		const uploadIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/upload-128.png"))).Resize(100, 100, ImageFilterType.Linear);
 		// https://www.flaticon.com/premium-icon/video_4726008
-		const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
-		this.dropArea = new DropArea(window, uploadIcon, fileIcon, (filepath) => {
-			this.filePath.SetText(`Use File: ${filepath}`);
+		// const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
+		this.dropArea = new DropArea(window, uploadIcon, (filePath, resetFileIcon) => {
+			this.filePath.SetText(`File Path: ${filePath}`);
+			getVideoPreview(filePath).then((buffer) => {
+				const res = ResourceSource.FromBuffer(buffer);
+				const aveImage = codec.Open(res);
+				const meta = codec.GetMetadata(res);
+				const ratio = meta.Width / meta.Height;
+				const resized = aveImage.Resize(100, 100 / ratio, ImageFilterType.Linear);
+				const preview = new NativeRawImage(window, resized);
+				resetFileIcon(preview);
+			});
 		});
 
 		this.step2 = new Label(window);

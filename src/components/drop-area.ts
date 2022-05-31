@@ -8,7 +8,7 @@ interface IDropAreaStyle {
 	};
 }
 
-export type OnDropHandler = (filePath: string) => void;
+export type OnDropHandler = (filePath: string, callback: (preview: NativeRawImage) => void) => void;
 
 export class DropArea extends Component {
 	private placeholder: Placeholder;
@@ -20,10 +20,10 @@ export class DropArea extends Component {
 	private style: IDropAreaStyle;
 	private onDrop: OnDropHandler;
 
-	constructor(window: Window, uploadIcon: AveImage, fileIcon: AveImage, onDrop: OnDropHandler) {
+	constructor(window: Window, uploadIcon: AveImage, onDrop: OnDropHandler) {
 		super(window);
 		this.uploadIcon = new NativeRawImage(window, uploadIcon);
-		this.fileIcon = new NativeRawImage(window, fileIcon);
+		this.fileIcon = null;
 		this.onDrop = onDrop;
 		this.onCreate();
 	}
@@ -63,7 +63,9 @@ export class DropArea extends Component {
 			const file = dc.FileGet()[0];
 			this.filePath = file;
 			this.placeholder.Redraw();
-			this.onDrop(this.filePath);
+			this.onDrop(this.filePath, (preview) => {
+				this.fileIcon = preview;
+			});
 			// console.log(`use file: ${file}`);
 		});
 	}
@@ -88,7 +90,7 @@ export class DropArea extends Component {
 		painter.SetPenColor(this.style.border.color);
 		painter.DrawRectangle(rect.x, rect.y, rect.w, rect.h);
 
-		if (this.filePath) {
+		if (this.filePath && this.fileIcon) {
 			const x = rect.w / 2 - this.fileIcon.native.GetWidth() / 2;
 			const y = rect.h / 2 - this.fileIcon.native.GetHeight() / 2;
 			painter.DrawImage(this.fileIcon.native, new Vec2(x, y));
