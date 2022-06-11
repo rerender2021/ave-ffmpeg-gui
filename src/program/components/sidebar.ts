@@ -50,9 +50,9 @@ export class Sidebar extends Area {
 		// prettier-ignore
 		const data = [
             { name: i18n.t("AddFrameNumber") }, 
-            { name: "b" }, 
-            { name: "c" }, 
-            { name: "d" }, 
+            // { name: "b" }, 
+            // { name: "c" }, 
+            // { name: "d" }, 
         ];
 		this.recipes.SetVirtual((sender, rowIndex, headerIndex) => {
 			const item = new RichListBoxItemVirtual();

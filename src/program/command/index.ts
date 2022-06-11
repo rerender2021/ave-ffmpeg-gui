@@ -1,15 +1,15 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import * as childProcess from "child_process";
-import { rootPath } from "../../common";
 
-const ffmpeg = path.resolve(rootPath, "./lib/ffmpeg.exe");
-const tempDir = path.resolve(__dirname, `./temp`);
-if (!fs.existsSync(tempDir)) {
-	fs.mkdirSync(tempDir);
-}
+const exePath = process.cwd();
+const ffmpeg = path.resolve(exePath, "./lib/ffmpeg.exe");
+const tempDir = path.resolve(exePath, `./temp`);
 
 function getTempImagePath() {
+	if (!fs.existsSync(tempDir)) {
+		fs.mkdirSync(tempDir);
+	}
 	return path.resolve(tempDir, `./${Date.now()}.png`);
 }
 
@@ -60,8 +60,8 @@ export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<str
 		const fileName = path.basename(inputPath, fileExtension);
 		const fileDir = path.dirname(inputPath);
 		const outputPath = path.resolve(fileDir, `./${fileName}.with-frames${fileExtension}`);
-		if(fs.existsSync(outputPath)) {
-			fs.removeSync(outputPath)
+		if (fs.existsSync(outputPath)) {
+			fs.removeSync(outputPath);
 		}
 
 		// prettier-ignore

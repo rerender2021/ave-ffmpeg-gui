@@ -1,10 +1,8 @@
 <p align="center">
-  <a href="https://qber-soft.github.io/Ave-Nodejs-Docs/">
-    <img width="200" src="https://qber-soft.github.io/Ave-Nodejs-Docs/img/Ave.svg">
-  </a>
+    <img width="200" src="./assets/cooking.png">
 </p>
 
-<h1 align="center">Avernakis UI Template</h1>
+<h1 align="center">Media Cook</h1>
 
 <div align="center">
 
@@ -12,17 +10,19 @@
  
 # Introduction
 
-This is the template project of Ave.
+A simple frontend for ffmpeg powered by [Avernakis UI](https://qber-soft.github.io/Ave-Nodejs-Docs/).
 
-Docs: [https://qber-soft.github.io/Ave-Nodejs-Docs/](https://qber-soft.github.io/Ave-Nodejs-Docs/)
+![add frame number](./docs/images/add-frame-number.png)
 
 ## Dev
 
+Download `ffmpeg.exe` and place it at `./lib/ffmpeg.exe`.
+
+You can find the ffmpeg build we use here: [tag/lib](https://github.com/rerender2021/ave-ffmpeg-gui/releases/tag/lib).
+
 ```bash
 > npm install
-> npm run dev 
-# or
-> npm run dev:button
+> npm run dev
 ```
 
 ## Package

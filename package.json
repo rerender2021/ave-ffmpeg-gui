@@ -8,7 +8,9 @@
     "dev:button": "tsnd --respawn ./src/button.ts",
     "prebuild": "del-cli ./build",
     "build": "tsc",
-    "postbuild": "copyfiles ./assets/* ./build",
+    "postbuild": "npm run copy:assets && npm run copy:lib",
+    "copy:assets": "copyfiles ./assets/** ./build",
+    "copy:lib": "copyfiles ./lib/** ./bin",
     "prerelease": "npm run build",
     "release": "ave-pack pack"
   },
