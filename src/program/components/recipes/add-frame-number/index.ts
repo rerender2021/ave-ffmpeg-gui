@@ -13,12 +13,13 @@ export class RecipeAddFrameNumber extends Area {
 
 	//
 	private step1: Label;
-	private filePath: Label;
+	private inputPath: Label;
 	private dropArea: DropArea;
 
 	//
 	private step2: Label;
 	private run: Button;
+	private outputPath: Label;
 
 	protected onCreate(): GridLayout {
 		//
@@ -37,17 +38,16 @@ export class RecipeAddFrameNumber extends Area {
 		this.step1.SetText("Step1: Drop your video here");
 		this.step1.SetAlignHorz(AlignType.Near);
 
-		this.filePath = new Label(window);
-		this.filePath.SetText("File Path: ");
-		this.filePath.SetAlignHorz(AlignType.Near);
+		this.inputPath = new Label(window);
+		this.inputPath.SetAlignHorz(AlignType.Near);
 
 		// https://www.flaticon.com/free-icon/pieces-of-cutlery_1328
 		const uploadIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/upload-128.png"))).Resize(100, 100, ImageFilterType.Linear);
 		// https://www.flaticon.com/premium-icon/video_4726008
 		// const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
-		this.dropArea = new DropArea(window, uploadIcon, (filePath, resetFileIcon) => {
-			recipeState.setInputPath(filePath);
-			getVideoPreview(filePath).then((buffer) => {
+		this.dropArea = new DropArea(window, uploadIcon, (inputPath, resetFileIcon) => {
+			recipeState.setInputPath(inputPath);
+			getVideoPreview(inputPath).then((buffer) => {
 				const res = ResourceSource.FromBuffer(buffer);
 				const aveImage = codec.Open(res);
 				const meta = codec.GetMetadata(res);
@@ -59,18 +59,27 @@ export class RecipeAddFrameNumber extends Area {
 		});
 
 		autorun(() => {
-			this.filePath.SetText(`File Path: ${recipeState.inputPath}`);
+			this.inputPath.SetText(`Input Path: ${recipeState.inputPath}`);
 		});
 
 		this.step2 = new Label(window);
 		this.step2.SetText("Step2: Click Run");
 		this.step2.SetAlignHorz(AlignType.Near);
 
+		this.outputPath = new Label(window);
+		this.outputPath.SetAlignHorz(AlignType.Near);
+
+		autorun(() => {
+			this.outputPath.SetText(`Output Path: ${recipeState.outputPath}`);
+		});
+
 		this.run = new Button(window);
 		this.run.SetText("Run");
 		this.run.OnClick((sender) => {
 			if (recipeState.inputPath) {
-				addFrameNumber({ videoPath: recipeState.inputPath });
+				addFrameNumber({ inputPath: recipeState.inputPath }).then((outputPath) => {
+					recipeState.setOutputPath(outputPath);
+				});
 			}
 		});
 
@@ -91,11 +100,13 @@ export class RecipeAddFrameNumber extends Area {
 				"15dpx",
 				"150dpx", /** dropArea */
 				"15dpx",
-				"30dpx",  /** filePath */
+				"30dpx",  /** inputPath */
 				"15dpx",
 				"30dpx",  /** step2 */
 				"15dpx",
 				"30dpx",  /** run */
+				"15dpx",
+				"30dpx",  /** outputPath */
 				"1"
 			].join(" "),
 			columns: "1 1 1",
@@ -105,11 +116,12 @@ export class RecipeAddFrameNumber extends Area {
 				//
 				step1: { x: 1, y: 3 },
 				dropArea: { x: 1, y: 5 },
-				filePath: { x: 1, y: 7 },
+				inputPath: { x: 1, y: 7 },
 
 				//
 				step2: { x: 1, y: 9 },
 				run: { x: 1, y: 11 },
+				outputPath: { x: 1, y: 13 },
 			},
 		};
 
@@ -119,7 +131,7 @@ export class RecipeAddFrameNumber extends Area {
 
 		container.addControl(this.step1, containerLayout.areas.step1);
 		container.addControl(this.dropArea.control, containerLayout.areas.dropArea);
-		container.addControl(this.filePath, containerLayout.areas.filePath);
+		container.addControl(this.inputPath, containerLayout.areas.inputPath);
 
 		container.addControl(this.step2, containerLayout.areas.step2);
 
@@ -132,6 +144,7 @@ export class RecipeAddFrameNumber extends Area {
 		};
 		const runArea = createGridLayout(window, runLayout);
 		runArea.addControl(this.run, runLayout.areas.content);
+		container.addControl(this.outputPath, containerLayout.areas.outputPath);
 
 		container.addControl(runArea.control, containerLayout.areas.run);
 

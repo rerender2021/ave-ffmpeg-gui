@@ -18,14 +18,14 @@ function readImage(imgPath: string) {
 }
 
 // ffmpeg -i <input> -ss 00:00:01.000 -vframes 1 <output>
-export async function getVideoPreview(videoPath: string): Promise<Buffer> {
+export async function getVideoPreview(inputPath: string): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		//
 		const temp = getTempImagePath();
 		// prettier-ignore
 		const args = [
 			`-hide_banner`, 
-			`-i ${videoPath}`, 
+			`-i ${inputPath}`, 
 			`-ss 00:00:01.000`, 
 			`-vframes 1`,
 			 temp
@@ -48,23 +48,26 @@ export async function getVideoPreview(videoPath: string): Promise<Buffer> {
 
 // ffmpeg -i <input> -vf "drawtext=fontfile=Arial.ttf:text='%{frame_num}':start_number=1:x=(w-tw)/2:y=h-(2*lh):fontcolor=red:fontsize=50:" -c:a copy <output>
 export interface IAddFrameNumberConfig {
-	videoPath: string;
+	inputPath: string;
 }
 
-export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<Boolean> {
-	const { videoPath } = config;
+export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<string> {
+	const { inputPath } = config;
 
 	return new Promise((resolve, reject) => {
 		//
-		const fileExtension = path.extname(videoPath);
-		const fileName = path.basename(videoPath, fileExtension);
-		const fileDir = path.dirname(videoPath);
+		const fileExtension = path.extname(inputPath);
+		const fileName = path.basename(inputPath, fileExtension);
+		const fileDir = path.dirname(inputPath);
 		const outputPath = path.resolve(fileDir, `./${fileName}.with-frames${fileExtension}`);
+		if(fs.existsSync(outputPath)) {
+			fs.removeSync(outputPath)
+		}
 
 		// prettier-ignore
 		const args = [
 			`-hide_banner`, 
-			`-i ${videoPath}`, 
+			`-i ${inputPath}`, 
 			`-vf "drawtext=fontfile=Arial.ttf:text='%{frame_num}':start_number=1:x=(w-tw)/2:y=h-(2*lh):fontcolor=red:fontsize=50:" -c:a copy`, 
 			outputPath
 		].join(" ");
@@ -76,7 +79,7 @@ export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<Boo
 			if (error) {
 				reject(error);
 			} else {
-				resolve(true);
+				resolve(outputPath);
 			}
 		});
 	});
