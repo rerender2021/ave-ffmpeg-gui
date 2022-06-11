@@ -1,8 +1,18 @@
-import { makeObservable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 
 export class RecipeState {
+	inputPath: string;
 	constructor() {
-		makeObservable(this, {});
+		this.inputPath = "";
+
+		makeObservable(this, {
+			inputPath: observable,
+			setInputPath: action,
+		});
+	}
+
+	setInputPath(inputPath: string) {
+		this.inputPath = inputPath;
 	}
 }
 

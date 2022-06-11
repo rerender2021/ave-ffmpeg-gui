@@ -1,9 +1,11 @@
 import { AlignType, Button, ImageFilterType, Label, Picture, ResourceSource, StretchMode } from "ave-ui";
+import { autorun } from "mobx";
 import { Area, createGridLayout, GridLayout, DropArea } from "../../../../components";
 import { NativeRawImage } from "../../../../components/native-image";
 import { assetPath } from "../../../../utils";
 import { addFrameNumber, getVideoPreview } from "../../../command";
 import { state } from "../../../state";
+import { recipeState } from "./state";
 
 export class RecipeAddFrameNumber extends Area {
 	private demoImage: Picture;
@@ -18,13 +20,7 @@ export class RecipeAddFrameNumber extends Area {
 	private step2: Label;
 	private run: Button;
 
-	//
-	private strFilePath: string;
-
 	protected onCreate(): GridLayout {
-		//
-		this.strFilePath = "";
-
 		//
 		const { window } = this;
 		const codec = state.getApp().GetImageCodec();
@@ -50,8 +46,7 @@ export class RecipeAddFrameNumber extends Area {
 		// https://www.flaticon.com/premium-icon/video_4726008
 		// const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
 		this.dropArea = new DropArea(window, uploadIcon, (filePath, resetFileIcon) => {
-			this.strFilePath = filePath;
-			this.filePath.SetText(`File Path: ${this.strFilePath}`);
+			recipeState.setInputPath(filePath);
 			getVideoPreview(filePath).then((buffer) => {
 				const res = ResourceSource.FromBuffer(buffer);
 				const aveImage = codec.Open(res);
@@ -63,6 +58,10 @@ export class RecipeAddFrameNumber extends Area {
 			});
 		});
 
+		autorun(() => {
+			this.filePath.SetText(`File Path: ${recipeState.inputPath}`);
+		});
+
 		this.step2 = new Label(window);
 		this.step2.SetText("Step2: Click Run");
 		this.step2.SetAlignHorz(AlignType.Near);
@@ -70,8 +69,8 @@ export class RecipeAddFrameNumber extends Area {
 		this.run = new Button(window);
 		this.run.SetText("Run");
 		this.run.OnClick((sender) => {
-			if (this.strFilePath) {
-				addFrameNumber({ videoPath: this.strFilePath });
+			if (recipeState.inputPath) {
+				addFrameNumber({ videoPath: recipeState.inputPath });
 			}
 		});
 
