@@ -59,7 +59,7 @@ export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<str
 		const fileExtension = path.extname(inputPath);
 		const fileName = path.basename(inputPath, fileExtension);
 		const fileDir = path.dirname(inputPath);
-		const outputPath = path.resolve(fileDir, `./${fileName}.with-frames${fileExtension}`);
+		const outputPath = path.resolve(fileDir, `./${fileName}-with-frames${fileExtension}`);
 		if (fs.existsSync(outputPath)) {
 			fs.removeSync(outputPath);
 		}
@@ -85,7 +85,7 @@ export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<str
 	});
 }
 
-//
+// ffmpeg -i <input> "%01d.png"
 export interface IVideoToFramesConfig {
 	inputPath: string;
 }
@@ -94,7 +94,34 @@ export async function videoToFrames(config: IVideoToFramesConfig): Promise<strin
 	const { inputPath } = config;
 
 	return new Promise((resolve, reject) => {
-		
+		//
+		const fileExtension = path.extname(inputPath);
+		const fileName = path.basename(inputPath, fileExtension);
+		const fileDir = path.dirname(inputPath);
+		const outputDir = path.resolve(fileDir, `./${fileName}-frames`);
+		if (fs.existsSync(outputDir)) {
+			fs.removeSync(outputDir);
+		}
+
+		fs.ensureDirSync(outputDir);
+
+		// prettier-ignore
+		const args = [
+			`-hide_banner`, 
+			`-i ${inputPath}`, 
+			path.resolve(`${outputDir}`, "./%01d.png")
+		].join(" ");
+
+		//
+		const command = `"${ffmpeg}" ${args}`;
+		// console.log(command);
+		childProcess.exec(command, (error, stdout, stderr) => {
+			if (error) {
+				console.error(error);
+				reject(error);
+			} else {
+				resolve(outputDir);
+			}
+		});
 	});
 }
-

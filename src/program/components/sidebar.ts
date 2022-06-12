@@ -67,7 +67,10 @@ export class Sidebar extends Area {
 		// handle event
 		this.recipes.OnSelectionEnd((sender) => {
 			const itemIndex = sender.ItemGetSelection();
-			state.setCurrentRecipe(itemIndex);
+			// it can be -1 when you click list box empty area
+			if (itemIndex >= 0) {
+				state.setCurrentRecipe(itemIndex);
+			}
 		});
 	}
 

@@ -46,7 +46,7 @@ export class RecipeVideoToFrames extends Area {
 		// https://www.flaticon.com/premium-icon/video_4726008
 		// const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
 		this.dropArea = new DropArea(window, uploadIcon, (inputPath, resetFileIcon) => {
-			// recipeState.setInputPath(inputPath);
+			recipeState.setInputPath(inputPath);
 			getVideoPreview(inputPath).then((buffer) => {
 				const res = ResourceSource.FromBuffer(buffer);
 				const aveImage = codec.Open(res);
@@ -70,15 +70,15 @@ export class RecipeVideoToFrames extends Area {
 		this.outputPath.SetAlignHorz(AlignType.Near);
 
 		autorun(() => {
-			this.outputPath.SetText(`Output Path: ${recipeState.outputPath}`);
+			this.outputPath.SetText(`Output Dir: ${recipeState.outputPath}`);
 		});
 
 		this.run = new Button(window);
 		this.run.SetText("Run");
 		this.run.OnClick((sender) => {
 			if (recipeState.inputPath) {
-				videoToFrames({ inputPath: recipeState.inputPath }).then((outputPath) => {
-					recipeState.setOutputPath(outputPath);
+				videoToFrames({ inputPath: recipeState.inputPath }).then((outputDir) => {
+					recipeState.setOutputPath(outputDir);
 				});
 			}
 		});
