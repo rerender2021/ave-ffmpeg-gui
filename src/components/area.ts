@@ -14,9 +14,12 @@ export abstract class Area extends Component {
 	}
 
 	protected abstract onCreate(): GridLayout;
+	abstract onShow(): void;
+	abstract onHide(): void;
 
 	create() {
 		this.layout = this.onCreate();
         return this;
 	}
+
 }

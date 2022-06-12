@@ -3,11 +3,11 @@ import { autorun } from "mobx";
 import { Area, createGridLayout, GridLayout, DropArea } from "../../../../components";
 import { NativeRawImage } from "../../../../components/native-image";
 import { assetPath } from "../../../../utils";
-import { addFrameNumber, getVideoPreview } from "../../../command";
+import { getVideoPreview, videoToFrames } from "../../../command";
 import { state } from "../../../state";
 import { recipeState } from "./state";
 
-export class RecipeAddFrameNumber extends Area {
+export class RecipeVideoToFrames extends Area {
 	private demoImage: Picture;
 	private description: Label;
 
@@ -27,11 +27,11 @@ export class RecipeAddFrameNumber extends Area {
 		const codec = state.getApp().GetImageCodec();
 
 		this.demoImage = new Picture(window);
-		this.demoImage.SetPicture(ResourceSource.FromPackedFile(assetPath(`recipes/add-frame-number/demo.png`)));
+		this.demoImage.SetPicture(ResourceSource.FromPackedFile(assetPath(`recipes/video-to-frames/demo.png`)));
 		this.demoImage.SetStretchMode(StretchMode.Fit);
 
 		this.description = new Label(window);
-		this.description.SetText("Description: Add frame number to each frame of your video");
+		this.description.SetText("Description: Convert video to frames");
 		this.description.SetAlignHorz(AlignType.Center);
 
 		this.step1 = new Label(window);
@@ -46,7 +46,7 @@ export class RecipeAddFrameNumber extends Area {
 		// https://www.flaticon.com/premium-icon/video_4726008
 		// const fileIcon = codec.Open(ResourceSource.FromPackedFile(assetPath("components/video-32.png")));
 		this.dropArea = new DropArea(window, uploadIcon, (inputPath, resetFileIcon) => {
-			recipeState.setInputPath(inputPath);
+			// recipeState.setInputPath(inputPath);
 			getVideoPreview(inputPath).then((buffer) => {
 				const res = ResourceSource.FromBuffer(buffer);
 				const aveImage = codec.Open(res);
@@ -77,7 +77,7 @@ export class RecipeAddFrameNumber extends Area {
 		this.run.SetText("Run");
 		this.run.OnClick((sender) => {
 			if (recipeState.inputPath) {
-				addFrameNumber({ inputPath: recipeState.inputPath }).then((outputPath) => {
+				videoToFrames({ inputPath: recipeState.inputPath }).then((outputPath) => {
 					recipeState.setOutputPath(outputPath);
 				});
 			}

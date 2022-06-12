@@ -84,3 +84,17 @@ export async function addFrameNumber(config: IAddFrameNumberConfig): Promise<str
 		});
 	});
 }
+
+//
+export interface IVideoToFramesConfig {
+	inputPath: string;
+}
+
+export async function videoToFrames(config: IVideoToFramesConfig): Promise<string> {
+	const { inputPath } = config;
+
+	return new Promise((resolve, reject) => {
+		
+	});
+}
+

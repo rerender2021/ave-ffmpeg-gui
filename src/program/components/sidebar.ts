@@ -50,9 +50,7 @@ export class Sidebar extends Area {
 		// prettier-ignore
 		const data = [
             { name: i18n.t("AddFrameNumber") }, 
-            // { name: "b" }, 
-            // { name: "c" }, 
-            // { name: "d" }, 
+            { name: i18n.t("VideoToFrames") },
         ];
 		this.recipes.SetVirtual((sender, rowIndex, headerIndex) => {
 			const item = new RichListBoxItemVirtual();
@@ -69,7 +67,10 @@ export class Sidebar extends Area {
 		// handle event
 		this.recipes.OnSelectionEnd((sender) => {
 			const itemIndex = sender.ItemGetSelection();
-			console.log(itemIndex);
+			state.setCurrentRecipe(itemIndex);
 		});
 	}
+
+	onShow(): void {}
+	onHide(): void {}
 }

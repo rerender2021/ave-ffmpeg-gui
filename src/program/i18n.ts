@@ -9,6 +9,7 @@ export interface ILang {
 	// user defined key
 	Recipe: string;
 	AddFrameNumber: string;
+	VideoToFrames: string
 }
 
 export type KeyOfLang = keyof ILang;
@@ -41,6 +42,7 @@ export function initI18n(app: App) {
 				//
 				Recipe: "Recipe",
 				AddFrameNumber: "Add Frame Number",
+				VideoToFrames: "Video To Frames"
 			},
 			[CultureId.zh_cn]: {
 				AppTitle: "音视频料理",
@@ -50,6 +52,7 @@ export function initI18n(app: App) {
 				//
 				Recipe: "Recipe",
 				AddFrameNumber: "Add Frame Number",
+				VideoToFrames: "Video To Frames"
 			},
 		},
 	};
