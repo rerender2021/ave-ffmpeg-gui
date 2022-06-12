@@ -25,4 +25,7 @@ export class RecipeTemplate extends Area {
 		container.addControl(button, containerLayout.areas.content);
 		return container;
 	}
+
+	onShow(): void {}
+	onHide(): void {}
 }

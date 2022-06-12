@@ -1,16 +1,26 @@
 import { App } from "ave-ui";
-import { makeObservable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 import { Ii18n } from "./i18n";
 import { IconDataMapType } from "./resource";
 
 export class ProgramState {
+	currentRecipe: number;
+s
 	// not ui related state
 	private resMap: IconDataMapType;
 	private app: App;
 	private _i18n: Ii18n;
 
 	constructor() {
-		makeObservable(this, {});
+		this.currentRecipe = 0;
+		makeObservable(this, {
+			currentRecipe: observable,
+			setCurrentRecipe: action,
+		});
+	}
+
+	setCurrentRecipe(index: number) {
+		this.currentRecipe = index;
 	}
 
 	setI18n(i18n: Ii18n) {
